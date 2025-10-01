@@ -1,5 +1,7 @@
 import tkinter as tk
+from ModelConfiguration import ModelConfiguration
 from ModelUse import ModelUse 
+from InformationSection import InformationSection
 
 class MainWindow:
     def __init__(self, root):
@@ -13,7 +15,9 @@ class MainWindow:
         main_frame.pack(fill="both", expand=True, padx=10, pady=10)
 
         # Panels
+        self.model_config_frame = ModelConfiguration(main_frame)
         self.model_use_frame = ModelUse(main_frame, self.model_config_frame)
+        self.info_frame = InformationSection(main_frame, self.model_use_frame)
 
         # Ensure main window stays in focus
         self.root.focus_force()

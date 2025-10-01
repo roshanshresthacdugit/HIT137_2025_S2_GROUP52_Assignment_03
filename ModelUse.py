@@ -173,4 +173,43 @@ class ModelUse:
 
         except Exception as e:
             self.add_chat_message(f"Error: {e}", is_user=False, error=True)
-      
+        
+
+    def add_chat_message(self, text, is_user, image=None, error=False):
+        ##message Frame
+        msg_frame = tk.Frame(self.chat_frame, bg="#f8f9fa", bd=1, relief="raised")
+        msg_frame.pack(fill="x", padx=20, pady=8, anchor="e" if is_user else "w")
+
+        timestamp = datetime.now().strftime("%H:%M")
+        tk.Label(
+            msg_frame, text=timestamp, font=("Arial", 8), bg="#f8f9fa", fg="#666"
+        ).pack(anchor="e" if is_user else "w", padx=5)
+
+        ##### Message bubble
+        bg_color = "#007bff" if is_user else "#e9ecef" if not error else "#ffcccc"
+        fg_color = "white" if is_user else "black" if not error else "red"
+        bubble = tk.Label(
+            msg_frame,
+            text=text,
+            font=("Arial", 12),
+            bg=bg_color,
+            fg=fg_color,
+            wraplength=320,
+            justify="left" if not is_user else "right",
+            padx=12,
+            pady=8,
+            relief="flat",
+            bd=2
+        )
+        bubble.pack(anchor="e" if is_user else "w", pady=2)
+
+        if image:
+            img_frame = tk.Frame(msg_frame, bg="#f8f9fa", bd=1, relief="solid")
+            img_frame.pack(anchor="e" if is_user else "w")
+            img_label = tk.Label(img_frame, image=image, bg="white")
+            img_label.pack(padx=2, pady=2)
+            self.chat_messages.append((img_frame, image))
+
+        self.chat_messages.append((msg_frame, None))
+        self.canvas.update_idletasks()
+        self.canvas.yview_moveto(1.0)
