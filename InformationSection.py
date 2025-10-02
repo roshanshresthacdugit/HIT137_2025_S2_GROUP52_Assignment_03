@@ -53,4 +53,41 @@ class InformationSection:
     def _on_mousewheel(self, event):
         self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
         return "break"
-        
+            
+    def load_sections_from_json(self):
+        """Load sections from JSON file."""
+        if os.path.exists(self.json_file):
+            try:
+                with open(self.json_file, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                    for title, desc in data.items():
+                        self.add_section(title, desc, top=False)
+            except Exception as e:
+                messagebox.showerror("Error", f"Failed to load {self.json_file}\n{e}")
+        else:
+            messagebox.showwarning("File Missing", f"{self.json_file} not found.")
+ 
+    def add_section(self, title, desc, top=True):
+        frame = tk.Frame(self.scroll_frame, bg="white", bd=1, relief="raised")
+        header_frame = tk.Frame(frame, bg="white")
+        header_frame.pack(fill="x")
+ 
+        tk.Label(header_frame, text=title, font=("Arial", 11, "bold"), bg="white", anchor="w").pack(side="left", padx=5, pady=4)
+ 
+        del_btn = tk.Button(
+            header_frame, text="❌", font=("Arial", 10), bg="white", fg="#ff4d4d", bd=0,
+            command=lambda f=frame, t=title: self.delete_section(f, t)
+        )
+        del_btn.pack(side="right", padx=5)
+        del_btn.bind("<Enter>", lambda e: del_btn.config(fg="#cc0000"))
+        del_btn.bind("<Leave>", lambda e: del_btn.config(fg="#ff4d4d"))
+ 
+        text_label = tk.Label(frame, text=desc, font=("Arial", 10), wraplength=320, justify="left", bg="white")
+        text_label.pack(anchor="w", padx=10, pady=5)
+ 
+        if top and self.scroll_frame.winfo_children():
+            frame.pack(fill="x", padx=10, pady=5, before=self.scroll_frame.winfo_children()[0])
+        else:
+            frame.pack(fill="x", padx=10, pady=5)
+ 
+        self.sections[title] = frame
