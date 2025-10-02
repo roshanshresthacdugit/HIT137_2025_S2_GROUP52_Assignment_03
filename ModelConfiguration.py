@@ -148,3 +148,24 @@ class ModelConfiguration:
             raise RuntimeError("Inference request timed out. Please try again.")
         except Exception as e:
             raise RuntimeError(f"Error during inference: {str(e)}")
+        
+    def load_model(self):
+        if not self.client:
+            messagebox.showwarning("No Token", "No valid Hugging Face token provided. Please use 'Set Token Button' to enter a valid token.")
+            self.status_label.config(text="Status: No Token")
+            self.type_label.config(text="Type: -")
+            self.desc_label.config(text="No token provided.")
+            return
+ 
+        sel_model = self.model_var.get()
+        try:
+            self.selected_model_id = self.models[sel_model]
+            self.model_type = sel_model
+            self.status_label.config(text="Status: Model Loaded Successfully")
+            self.type_label.config(text=f"Type: {sel_model}")
+            self.desc_label.config(text=self.model_descriptions.get(sel_model, ""))
+        except Exception as e:
+            self.status_label.config(text="Status: Failed to load model")
+            self.type_label.config(text="Type: -")
+            self.desc_label.config(text="Error loading model.")
+            messagebox.showerror("Error", f"Could not configure model:\n{e}")
