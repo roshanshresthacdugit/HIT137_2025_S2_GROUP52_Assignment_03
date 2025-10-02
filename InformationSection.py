@@ -42,3 +42,14 @@ class InformationSection:
         self.scroll_frame.bind("<Enter>", lambda e: self.set_scroll_active(True))
         self.scroll_frame.bind("<Leave>", lambda e: self.set_scroll_active(False))
 
+    def set_scroll_active(self, active):
+        if self.model_use_frame:
+            self.model_use_frame.set_right_panel_active(active)
+        if active:
+            self.canvas.bind("<MouseWheel>", self._on_mousewheel)
+        else:
+            self.canvas.unbind("<MouseWheel>")
+ 
+    def _on_mousewheel(self, event):
+        self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+        return "break"
