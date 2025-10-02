@@ -141,9 +141,52 @@ class ModelUse:
         if not self.input_entry.get().strip():
             self.input_entry.insert(0, "Type your prompt here...")
             self.input_entry.config(fg="gray")
-    
+            
+    def clear_chat(self):
+        for widget, _ in self.chat_messages:
+            widget.destroy()
+        self.chat_messages = []
+        self.clear_file_preview(None)
+        messagebox.showinfo("Chat Cleared", "Chat history has been cleared.")
+
+    def clear_file_preview(self, event):
+        self.file_path = None
+        self.loaded_image = None
+        if self.file_label:
+            self.file_label.destroy()
+            self.file_label = None
+
     def upload_file(self):
-        pass
+        input_type = self.input_type_var.get()
+        if input_type == "Text":
+            messagebox.showwarning("Invalid", "No file upload needed for Text input.")
+            return
+
+        filetypes = [("Image files", "*.jpg *.jpeg *.png")] if input_type == "Image" else [("Audio files", "*.wav")]
+        filepath = filedialog.askopenfilename(title=f"Select {input_type}", filetypes=filetypes)
+        if filepath:
+            if os.path.getsize(filepath) / (1024 * 1024) > 10:
+                messagebox.showerror("Error", "File size exceeds 10MB limit.")
+                return
+            try:
+                self.file_path = filepath
+                #####Clear previous preview
+                if self.file_label:
+                    self.file_label.destroy()
+                    self.file_label = None
+
+                img = Image.open(filepath)
+                img.verify()
+                img = Image.open(filepath).resize((50, 50)) 
+                self.loaded_image = ImageTk.PhotoImage(img)
+                self.file_label = tk.Label(self.file_preview_frame, image=self.loaded_image, bg="#f0f0f0")
+                self.file_label.pack(side="left", padx=5)
+               
+            except Exception as e:
+                messagebox.showerror("Error", f"Invalid file: {e}")
+                self.file_path = None
+                self.loaded_image = None
+
 
     def process_input(self):
         sel_model = self.model_config_panel.model_type
