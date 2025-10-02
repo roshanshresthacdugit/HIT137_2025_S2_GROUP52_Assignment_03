@@ -74,12 +74,57 @@ class ModelConfiguration:
         
 
     def set_token(self, initial=False):
-        pass
-
-
-    def load_model(self):
-        pass
+       prompt_text = "Enter your Hugging Face Access token:"
+       if not initial:
+           prompt_text = "Enter new Hugging Face token:"
+       token = simpledialog.askstring(
+           "Hugging Face Token",
+           prompt_text,
+           show="*",
+           parent=self.parent
+       )
+       #########Clean and validate access token #######
+       if token:
+           token = token.strip()
+           if re.match(r'^hf_[a-zA-Z0-9]+$', token):
+               try:
+                   self.client = InferenceClient(token=token)
+                   self.HF_TOKEN = token
+                   if not initial:
+                       messagebox.showinfo("Success", "Token updated successfully.")
+               except Exception as e:
+                   self.client = None
+                   messagebox.showerror("Error", f"Failed to initialize InferenceClient: {e}")
+           else:
+               self.client = None
+               messagebox.showwarning("Invalid Token", "Invalid token format. Token must start with 'hf_' and contain only alphanumeric characters. No models will work without a valid token.")
+       else:
+           self.client = None
+           if initial:
+               messagebox.showwarning("No Token", "No Hugging Face token provided. You can use the UI, but no models will work without a valid token. Use 'Set Token Button' to enter a token.")
+           else:
+               messagebox.showwarning("No Token", "No token provided. Models will not work until a valid token is entered.")
     
+    def load_model(self):
+        if not self.client:
+            messagebox.showwarning("No Token", "No valid Hugging Face token provided. Please use 'Set Token Button' to enter a valid token.")
+            self.status_label.config(text="Status: No Token")
+            self.type_label.config(text="Type: -")
+            self.desc_label.config(text="No token provided.")
+            return
+ 
+        sel_model = self.model_var.get()
+        try:
+            self.selected_model_id = self.models[sel_model]
+            self.model_type = sel_model
+            self.status_label.config(text="Status: Model Loaded Successfully")
+            self.type_label.config(text=f"Type: {sel_model}")
+            self.desc_label.config(text=self.model_descriptions.get(sel_model, ""))
+        except Exception as e:
+            self.status_label.config(text="Status: Failed to load model")
+            self.type_label.config(text="Type: -")
+            self.desc_label.config(text="Error loading model.")
+            messagebox.showerror("Error", f"Could not configure model:\n{e}")
 
     def run_inference(self, prompt, image_path=None):
         if not self.client:
