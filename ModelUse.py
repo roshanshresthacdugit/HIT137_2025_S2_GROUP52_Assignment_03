@@ -110,6 +110,22 @@ class ModelUse:
 
         self.input_entry.focus_set()
 
+    def set_model_use_panel(self, active):
+        if active and not self.is_right_panel_active:
+            self.canvas.bind("<MouseWheel>", self._on_mousewheel)
+            self.chat_frame.bind("<MouseWheel>", self._on_mousewheel)
+        else:
+            self.canvas.unbind("<MouseWheel>")
+            self.chat_frame.unbind("<MouseWheel>")
+ 
+    def set_right_panel_active(self, active):
+        self.is_right_panel_active = active
+        if not active:
+            self.set_model_use_panel(True)
+ 
+    def _on_mousewheel(self, event):
+        self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+        return "break"
     
     def upload_file(self):
         pass
