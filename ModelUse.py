@@ -127,20 +127,6 @@ class ModelUse:
         self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
         return "break"
     
-    def clear_placeholder(self, event):
-        if self.input_entry.get() == "Type your prompt here...":
-            self.input_entry.delete(0, tk.END)
-            self.input_entry.config(fg="black")
- 
-    def clear_placeholder_on_keypress(self, event):
-        if self.input_entry.get() == "Type your prompt here...":
-            self.input_entry.delete(0, tk.END)
-            self.input_entry.config(fg="black")
- 
-    def add_placeholder(self, event):
-        if not self.input_entry.get().strip():
-            self.input_entry.insert(0, "Type your prompt here...")
-            self.input_entry.config(fg="gray")
     def upload_file(self):
         pass
 
