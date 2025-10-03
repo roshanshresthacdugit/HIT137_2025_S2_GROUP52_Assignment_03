@@ -1,8 +1,17 @@
+software now assignment 2
+
+Team Member
+<br> 
+Roshan Kumar Shrestha(S395498) 
+<br>Subash Gaire(S393152) 
+<br>Sujal Bhandari(S392965) 
+<br>Aaron Madelo(S389992)
+
 Hugging Face AI Model Interface
-A Python desktop application using Tkinter to provide a simple, user-friendly GUI for interacting with various AI models from the Hugging Face Hub. The app supports chat, text-to-image, text-to-video, and image classification models in an intuitive chat-like interface.
+<br>A Python desktop application using Tkinter to provide a simple, user-friendly GUI for interacting with various AI models from the Hugging Face Hub. The app supports chat, text-to-image, text-to-video, and image classification models in an intuitive chat-like interface.
 
 Core Features
-Multi-Model Support: Easily switch between Chat LLMs, Text-to-Image, Text-to-Video, and Image Classification models.
+<br>Multi-Model Support: Easily switch between Chat LLMs, Text-to-Image, Text-to-Video, and Image Classification models.
 
 Secure Token Authentication: A startup prompt securely requests and validates your Hugging Face access token.
 
@@ -10,8 +19,6 @@ Interactive Chat UI: Send text prompts, upload images, and receive responses, al
 
 Dynamic Information Panel: A customizable side panel to add, view, and delete notes, with content saved to a JSON file.
 
-Requirements
-All required Python packages are listed in the requirements.txt file.
 
 Quick Start
 Clone the Repository
@@ -21,25 +28,24 @@ git clone <your-repository-url>
 cd <your-repository-directory>
 
 ```
+Requirements
+All required Python packages are listed in the requirements.txt file.
 
 Install Dependencies
 ```
 pip install -r requirements.txt
 ```
-
+```
 python MainWindow.py
 First-Time Use
-
 Enter your Hugging Face access token.
-
 Select a model from the dropdown in the left panel and click Use Model.
-
 Start sending prompts or uploading files in the center panel.
+```
 
 Supported Models
 The application is pre-configured to support the following models:
 
-(Some text, like a heading or paragraph)
 
 | Model Name                        | Type                  | Hugging Face ID              | 
 | -----                             | -----                 | -----                        |      
