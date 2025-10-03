@@ -173,16 +173,9 @@ class ModelConfiguration:
                     result = self.client.image_classification(
                         image=image_path,
                         model=self.selected_model_id
-                    )
-                    # Fallback to resnet-50 if vit fails
+                    )                
                     if not result or not isinstance(result, list) or 'label' not in result[0]:
-                        fallback_model = "microsoft/resnet-50"
-                        result = self.client.image_classification(
-                            image=image_path,
-                            model=fallback_model
-                        )
-                        if not result or not isinstance(result, list) or 'label' not in result[0]:
-                            raise ValueError("Both primary and fallback models failed to classify the image.")
+                        raise ValueError("Model failed to classify the image.")
                     top_pred = result[0]
                     return f"Class: {top_pred['label']} (Confidence: {top_pred['score']:.2%})"
                 except ValueError as ve:
