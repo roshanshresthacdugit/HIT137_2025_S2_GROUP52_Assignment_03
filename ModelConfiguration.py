@@ -72,39 +72,45 @@ class ModelConfiguration:
         self.models = {name: info["id"] for name, info in data.items()}
         self.model_descriptions = {name: info["description"] for name, info in data.items()} 
         
-
+    ############# Asking Access token window #############
     def set_token(self, initial=False):
-       prompt_text = "Enter your Hugging Face Access token:"
-       if not initial:
+        prompt_text = "Enter your Hugging Face Access token:"
+        if not initial:
            prompt_text = "Enter new Hugging Face token:"
-       token = simpledialog.askstring(
+        token = simpledialog.askstring(
            "Hugging Face Token",
            prompt_text,
            show="*",
            parent=self.parent
        )
        #########Clean and validate access token #######
-       if token:
-           token = token.strip()
-           if re.match(r'^hf_[a-zA-Z0-9]+$', token):
-               try:
-                   self.client = InferenceClient(token=token)
-                   self.HF_TOKEN = token
-                   if not initial:
+        if token:
+            token = token.strip()
+            if re.match(r'^hf_[a-zA-Z0-9]+$', token):
+                try:
+                    self.client = InferenceClient(token=token)
+                    self.HF_TOKEN = token
+                    if not initial:
                        messagebox.showinfo("Success", "Token updated successfully.")
-               except Exception as e:
+                except Exception as e:
                    self.client = None
                    messagebox.showerror("Error", f"Failed to initialize InferenceClient: {e}")
-           else:
+            else:
                self.client = None
                messagebox.showwarning("Invalid Token", "Invalid token format. Token must start with 'hf_' and contain only alphanumeric characters. No models will work without a valid token.")
-       else:
+        else:
            self.client = None
            if initial:
                messagebox.showwarning("No Token", "No Hugging Face token provided. You can use the UI, but no models will work without a valid token. Use 'Set Token Button' to enter a token.")
            else:
                messagebox.showwarning("No Token", "No token provided. Models will not work until a valid token is entered.")
+        
+        ####### Restoring focus to main window ################
+        self.parent.winfo_toplevel().focus_force()
+        self.parent.winfo_toplevel().lift()
     
+
+    #############  Model loading Function #######################
     def load_model(self):
         if not self.client:
             messagebox.showwarning("No Token", "No valid Hugging Face token provided. Please use 'Set Token Button' to enter a valid token.")
@@ -126,6 +132,8 @@ class ModelConfiguration:
             self.desc_label.config(text="Error loading model.")
             messagebox.showerror("Error", f"Could not configure model:\n{e}")
 
+
+    ############# infering the model #####################
     def run_inference(self, prompt, image_path=None):
         if not self.client:
             raise RuntimeError("No valid Hugging Face token provided. Please use 'Set Token Button' to enter a valid token.")

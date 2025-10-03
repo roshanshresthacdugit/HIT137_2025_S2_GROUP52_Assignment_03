@@ -84,7 +84,6 @@ class ModelUse:
         self.send_btn.bind("<Leave>", lambda e: self.send_btn.config(bg="#007bff"))
         
         #### Text Input #########
-       
         self.input_entry = tk.Entry(
             main_controls_frame,
             font=("Arial", 12),

@@ -1,0 +1,7 @@
+{
+  "App Overview": "This Tkinter-based GUI integrates with Hugging Face's InferenceClient to process text and through various AI models. The ModelConfiguration Frame manages model selection, ModelUse handles input/output in a chat-like interface, and InformationSection displays editable explanations and you can add or remove the information as well.",
+  "Encapsulation": "Encapsulation is used in ModelConfig to protect the HF_TOKEN and InferenceClient instance as private attributes, accessible only through methods like load_model and run_inference. This ensures secure handling of the API token and client configuration.",
+  "Inheritance": "Inheritance could be applied by creating a base Panel class with shared UI setup methods (e.g., for placing frames), which ModelConfiguration Frame, ModelUse Frame, and InformationSection Frame could inherit. The current code does not use inheritance but is structured to allow future extensions.",
+  "Polymorphism": "Polymorphism is implemented in ModelConfiguration run_inference method, which uses the same interface to handle different model types (Chat LLM, Text-to-Image, etc.), with logic varying based on the model, enabling flexible processing of inputs.",
+  "Abstraction": "Abstraction is achieved in all panels by exposing high-level methods (e.g., load_model, process_input, add_information) that hide implementation details, making the code modular and easier to maintain."
+}

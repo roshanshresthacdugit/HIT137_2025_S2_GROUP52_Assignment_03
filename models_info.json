@@ -1,0 +1,18 @@
+{
+  "DeepSeek-V3 (Chat LLM)": {
+    "id": "deepseek-ai/DeepSeek-V3-0324",
+    "description": "DeepSeek-V3 is a large language model optimized for conversational tasks and text generation."
+  },
+  "FLUX.1-dev (Text-to-Image)": {
+    "id": "black-forest-labs/FLUX.1-dev",
+    "description": "FLUX.1-dev generates high-quality images from text prompts, developed by Black Forest Labs."
+  },
+  "Wan2.2-T2V-A14B (Text-to-Video)": {
+    "id": "Wan-AI/Wan2.2-T2V-A14B",
+    "description": "Wan2.2-T2V-A14B creates videos from text descriptions, supporting dynamic content generation."
+  },
+  "ViT (Image Classification)": {
+    "id": "google/vit-base-patch16-224",
+    "description": "Vision Transformer classifies images into 1,000 ImageNet categories, such as animals or objects."
+  }
+}

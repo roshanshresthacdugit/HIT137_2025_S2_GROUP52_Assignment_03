@@ -42,6 +42,9 @@ class InformationSection:
         self.scroll_frame.bind("<Enter>", lambda e: self.set_scroll_active(True))
         self.scroll_frame.bind("<Leave>", lambda e: self.set_scroll_active(False))
 
+        self.load_sections_from_json()
+
+
     def set_scroll_active(self, active):
         if self.model_use_frame:
             self.model_use_frame.set_right_panel_active(active)
@@ -91,3 +94,67 @@ class InformationSection:
             frame.pack(fill="x", padx=10, pady=5)
  
         self.sections[title] = frame
+    
+    def open_add_window(self):
+        popup = tk.Toplevel()
+        popup.title("Add Information")
+        popup.geometry("400x250")
+        popup.configure(bg="white")
+
+        tk.Label(popup, text="Header:", font=("Arial", 10), bg="white").pack(anchor="w", padx=10, pady=5)
+        key_entry = ttk.Entry(popup, font=("Arial", 10))
+        key_entry.pack(fill="x", padx=10, pady=5)
+
+        tk.Label(popup, text="Description:", font=("Arial", 10), bg="white").pack(anchor="w", padx=10, pady=5)
+        desc_entry = tk.Text(popup, height=4, wrap="word", font=("Arial", 10))
+        desc_entry.pack(fill="x", padx=10, pady=5)
+
+        save_btn = tk.Button(
+            popup, text="Save", font=("Arial", 10), bg="#28a745", fg="white",
+            command=lambda: self.save_section(key_entry, desc_entry, popup)
+        )
+        save_btn.pack(pady=10,ipady=5, ipadx=10)
+        save_btn.bind("<Enter>", lambda e: save_btn.config(bg="#218838"))
+        save_btn.bind("<Leave>", lambda e: save_btn.config(bg="#28a745"))
+
+    def save_section(self, key_entry, desc_entry, popup):
+        key = key_entry.get().strip()
+        desc = desc_entry.get("1.0", tk.END).strip()
+        if key and desc:
+            self.add_section(key, desc, top=True)
+            self.update_json(key, desc)
+            popup.destroy()
+        else:
+            messagebox.showwarning("Input Missing", "Please provide both a header and description.")
+
+    def update_json(self, key, desc):
+        """Update JSON file with a new section."""
+        data = {}
+        if os.path.exists(self.json_file):
+            try:
+                with open(self.json_file, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+            except:
+                pass
+        data[key] = desc
+        with open(self.json_file, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=4, ensure_ascii=False)
+
+    def delete_section(self, frame, title):
+        frame.destroy()
+        if title in self.sections:
+            del self.sections[title]
+            self.remove_from_json(title)
+
+    def remove_from_json(self, title):
+        """Remove a section from JSON file."""
+        if os.path.exists(self.json_file):
+            try:
+                with open(self.json_file, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                if title in data:
+                    del data[title]
+                    with open(self.json_file, "w", encoding="utf-8") as f:
+                        json.dump(data, f, indent=4, ensure_ascii=False)
+            except Exception as e:
+                messagebox.showerror("Error", f"Failed to update {self.json_file}\n{e}")
