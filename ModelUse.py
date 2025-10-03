@@ -142,6 +142,8 @@ class ModelUse:
             self.input_entry.config(fg="gray")
             
     def clear_chat(self):
+        """Removes all message bubbles from the chat frame and resets the internal message history."""
+
         for widget, _ in self.chat_messages:
             widget.destroy()
         self.chat_messages = []
@@ -156,6 +158,7 @@ class ModelUse:
             self.file_label = None
 
     def upload_file(self):
+        """for file upload like image"""
         input_type = self.input_type_var.get()
         if input_type == "Text":
             messagebox.showwarning("Invalid", "No file upload needed for Text input.")
@@ -188,6 +191,7 @@ class ModelUse:
 
 
     def process_input(self):
+        """process the user input text and image, runs the model inference and dispaly the user message and model response"""
         sel_model = self.model_config_panel.model_type
         if not sel_model:
             messagebox.showwarning("No Model", "Please select and load a model first.")
@@ -249,6 +253,9 @@ class ModelUse:
         
 
     def add_chat_message(self, text, is_user, image=None, error=False):
+        """
+        Creates and displays a chat message bubble in the scrollable chat frame.
+        """
         ##message Frame
         msg_frame = tk.Frame(self.chat_frame, bg="#f8f9fa", bd=1, relief="raised")
         msg_frame.pack(fill="x", padx=20, pady=8, anchor="e" if is_user else "w")

@@ -71,6 +71,9 @@ class InformationSection:
             messagebox.showwarning("File Missing", f"{self.json_file} not found.")
  
     def add_section(self, title, desc, top=True):
+        """
+        Generates and displays a single, collapsible information section in the panel.
+        """
         frame = tk.Frame(self.scroll_frame, bg="white", bd=1, relief="raised")
         header_frame = tk.Frame(frame, bg="white")
         header_frame.pack(fill="x")
@@ -96,12 +99,14 @@ class InformationSection:
         self.sections[title] = frame
     
     def open_add_window(self):
+        """Opens a new dialog window to allow the user to input a title and description for a new section."""
+
         popup = tk.Toplevel()
         popup.title("Add Information")
         popup.geometry("400x250")
         popup.configure(bg="white")
 
-        tk.Label(popup, text="Header:", font=("Arial", 10), bg="white").pack(anchor="w", padx=10, pady=5)
+        tk.Label(popup, text="Title:", font=("Arial", 10), bg="white").pack(anchor="w", padx=10, pady=5)
         key_entry = ttk.Entry(popup, font=("Arial", 10))
         key_entry.pack(fill="x", padx=10, pady=5)
 
@@ -118,6 +123,10 @@ class InformationSection:
         save_btn.bind("<Leave>", lambda e: save_btn.config(bg="#28a745"))
 
     def save_section(self, key_entry, desc_entry, popup):
+        """
+        Validates input from the 'Add New Section' dialog, creates the section, 
+        and updates the persistent JSON file.
+        """
         key = key_entry.get().strip()
         desc = desc_entry.get("1.0", tk.END).strip()
         if key and desc:
@@ -141,6 +150,7 @@ class InformationSection:
             json.dump(data, f, indent=4, ensure_ascii=False)
 
     def delete_section(self, frame, title):
+        """delete the section from the frame"""
         frame.destroy()
         if title in self.sections:
             del self.sections[title]

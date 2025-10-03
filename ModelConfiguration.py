@@ -74,6 +74,10 @@ class ModelConfiguration:
         
     ############# Asking Access token window #############
     def set_token(self, initial=False):
+        """
+        show popup to the user to enter their Hugging Face access token and initializes 
+        the InferenceClient.
+        """
         prompt_text = "Enter your Hugging Face Access token:"
         if not initial:
            prompt_text = "Enter new Hugging Face token:"
@@ -112,6 +116,9 @@ class ModelConfiguration:
 
     #############  Model loading Function #######################
     def load_model(self):
+        """
+        Loads and configures the selected model from the dropdown.
+        """
         if not self.client:
             messagebox.showwarning("No Token", "No valid Hugging Face token provided. Please use 'Set Token Button' to enter a valid token.")
             self.status_label.config(text="Status: No Token")
@@ -135,6 +142,16 @@ class ModelConfiguration:
 
     ############# infering the model #####################
     def run_inference(self, prompt, image_path=None):
+        """
+        Executes inference against the selected Hugging Face model based on its type.
+
+        Args:
+            prompt (str): The text input for the model.
+            image_path (str, optional): The path to an image file, required for Image Classification tasks. Defaults to None.
+
+        Returns:
+            str or PIL.Image: The result of the inference, which could be text (str), a PIL Image object, or a confirmation message for video.
+        """
         if not self.client:
             raise RuntimeError("No valid Hugging Face token provided. Please use 'Set Token Button' to enter a valid token.")
         if not self.selected_model_id:
@@ -195,23 +212,3 @@ class ModelConfiguration:
         except Exception as e:
             raise RuntimeError(f"Error during inference: {str(e)}")
         
-    def load_model(self):
-        if not self.client:
-            messagebox.showwarning("No Token", "No valid Hugging Face token provided. Please use 'Set Token Button' to enter a valid token.")
-            self.status_label.config(text="Status: No Token")
-            self.type_label.config(text="Type: -")
-            self.desc_label.config(text="No token provided.")
-            return
- 
-        sel_model = self.model_var.get()
-        try:
-            self.selected_model_id = self.models[sel_model]
-            self.model_type = sel_model
-            self.status_label.config(text="Status: Model Loaded Successfully")
-            self.type_label.config(text=f"Type: {sel_model}")
-            self.desc_label.config(text=self.model_descriptions.get(sel_model, ""))
-        except Exception as e:
-            self.status_label.config(text="Status: Failed to load model")
-            self.type_label.config(text="Type: -")
-            self.desc_label.config(text="Error loading model.")
-            messagebox.showerror("Error", f"Could not configure model:\n{e}")
